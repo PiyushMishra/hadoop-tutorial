@@ -47,23 +47,19 @@ class IntSumReducer
 }
 
 object WordCount {
-
-  def main(args: Array[String]): Int = {
-    val conf = new Configuration()
-    val otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs
-    if (otherArgs.length != 2) {
-      println("Usage: wordcount <in> <out>")
-      return 2
-    }
-    val job = new Job(conf, "word count")
+  def main(args: Array[String]) = {
+    val conf = new Configuration();
+    val job = Job.getInstance(conf, "word count");
     job.setJarByClass(classOf[TokenizerMapper])
     job.setMapperClass(classOf[TokenizerMapper])
     job.setCombinerClass(classOf[IntSumReducer])
     job.setReducerClass(classOf[IntSumReducer])
     job.setOutputKeyClass(classOf[Text])
     job.setOutputValueClass(classOf[IntWritable])
+    println(args(0), args(1))
     FileInputFormat.addInputPath(job, new Path(args(0)))
-    FileOutputFormat.setOutputPath(job, new Path((args(1))))
-    if (job.waitForCompletion(true)) 0 else 1
+    FileOutputFormat.setOutputPath(job, new Path(args(1)))
+    val value = if (job.waitForCompletion(true)) 0 else 1
+    System.exit(value)
   }
 }
