@@ -46,7 +46,7 @@ class IntSumReducer
   }
 }
 
-object WordCount {
+object WordCount1 {
   def main(args: Array[String]) = {
     val conf = new Configuration();
     val job = Job.getInstance(conf, "word count");
